@@ -1,3 +1,37 @@
+/* ▼ 全体に横スクロールを防ぐ基本設定を追加 */
+html, body {
+    overflow-x: hidden;
+}
+
+/* ▼ グローバルにbox-sizingを設定（意図しないはみ出し防止） */
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+/* ▼ 画像や動画がはみ出さないように制限 */
+img, video {
+    max-width: 100%;
+    height: auto;
+    aspect-ratio: 16/9;
+    object-fit: cover;
+}
+
+/* ▼ .work-track の画像をスマホでも100vw以上に広がらないように制限 */
+.work-track img {
+    width: 100vw;
+    max-width: 100vw;
+    min-width: 100vw;
+}
+
+/* ▼ フッターの横はみ出しを防止 */
+.footer-container,
+.footer-inner {
+    max-width: 100%;
+    overflow-x: hidden;
+    padding-left: 4vw;
+    padding-right: 4vw;
+}
+
 /* 基本的なリセット */
 body, h1, h2, p, ul, li, figure, figcaption, blockquote, dl, dd {
     margin: 0;
@@ -188,12 +222,31 @@ nav.scrolled .nav-links a:hover {
     line-height: 1.3;
 }
 
-/* PC用のTSUBASA表示 (デフォルト) */
+/* PC表示：デフォルトは横書き */
+.growth-vertical-mobile,
 .tsubasa-vertical-mobile {
     display: none;
 }
-.tsubasa-normal {
-    display: inline; /* または状況に応じて block */
+
+/* スマホ表示で縦書き */
+@media screen and (max-width: 768px) {
+    .growth-normal,
+    .tsubasa-normal {
+        display: none !important;
+    }
+    .growth-vertical-mobile {
+        display: inline-block;
+        font-size: inherit;
+        line-height: 1.5;
+    }
+    .tsubasa-vertical-mobile {
+        display: inline-block !important;
+        writing-mode: vertical-lr;
+        text-orientation: upright;
+        font-size: inherit;
+        line-height: 1.5;
+        text-align: center;
+    }
 }
 
 /* フェードアニメーション */
@@ -239,18 +292,28 @@ footer {
     .hamburger {
         display: none !important;
     }
+    .slide img {
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+        height: 100vh;
+        max-height: 90vh;
+        object-fit: cover;
+        display: block;
+        margin: 0 auto;
+    }
 }
 
 /* スマートフォン向けのスタイル (画面幅が768px以下の場合) */
 @media screen and (max-width: 768px) {
     .slide-text {
-        font-size: 2.5em; /* スマートフォンでは少し文字サイズを調整 */
-        writing-mode: vertical-rl; /* 縦書き（右から左へ） */
-        text-orientation: mixed;
-        line-height: 1.5; /* 縦書き時の行間調整 */
-        /* 縦書きの場合、transformの調整や幅・高さの指定が必要な場合があります */
-        /* 必要に応じて以下のコメントアウトを解除・調整してください */
-        /* white-space: nowrap; */ /* 改行させない場合（TSUBASAは2行なので通常不要） */
+        font-size: 1.8em;
+        max-width: 90vw;
+        max-height: 80vh;
+        overflow-y: auto;
+        padding: 0 4vw;
+        text-align: center;
+        box-sizing: border-box;
     }
 
     .slide-text br {
@@ -261,32 +324,33 @@ footer {
 
     /* スマホ表示時のTSUBASAの制御 */
     .tsubasa-normal {
-        display: none;
+        display: none !important;
     }
     .tsubasa-vertical-mobile {
-        display: inline-block; /* 親の縦書きコンテキスト内でブロックとして振る舞う */
-        writing-mode: horizontal-tb; /* この部分だけ横書きモードに戻す */
-        text-align: center;   /* ユーザー指定のスタイル */
-        line-height: 1.2;     /* 文字間（行間）の調整 */
-        /* font-size, color, font-weight は親の .slide-text から継承されます */
-        /* 必要であればここで上書きしてください */
+        display: inline-block !important;
+        writing-mode: vertical-lr;
+        text-orientation: upright;
+        font-size: inherit;
+        line-height: 1.5;
+        text-align: center;
     }
 
     .tsubasa-vertical-mobile br {
         content: normal; /* 親の .slide-text br の content: "" を上書き */
         margin-top: 0;   /* brタグのデフォルトのマージンに戻すか、調整 */
-        /* display: block; はbrタグのデフォルトなので、特に指定不要な場合が多い */
     }
 
     /* スマホ表示時のheader01の制御 */
     .header01-normal {
-        display: none;
+        display: none !important;
     }
     .header01-vertical-mobile {
-        display: inline-block;
-        writing-mode: horizontal-tb;
+        display: block !important;
+        writing-mode: vertical-lr;
+        text-orientation: upright;
+        font-size: inherit;
+        line-height: 1.5;
         text-align: center;
-        line-height: 1.2;
     }
     .header01-vertical-mobile br {
         content: normal;
@@ -346,6 +410,9 @@ footer {
         display: block;
         padding: 12px 0 12px 24px;
         box-sizing: border-box;
+    }
+    section {
+        margin-bottom: 18px;
     }
 }
 
@@ -1342,4 +1409,184 @@ nav.scrolled .hamburger span {
     .footer-message-text {
         text-align: center;
     }
+}
+
+/* ▼ 全体の左右パディング統一 */
+section, .hero, .footer-container {
+  padding-left: 5vw;
+  padding-right: 5vw;
+  box-sizing: border-box;
+}
+
+/* ▼ スライド画像の左右オーバーフローを防ぐ */
+.slideshow-container, .slide img {
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: hidden;
+  object-fit: cover;
+}
+
+/* ▼ その他のテキストは改行させないように */
+/* .slide-text span:not(.header01-vertical-mobile):not(.tsubasa-vertical-mobile) { white-space: nowrap; } ← この行を完全削除 */
+
+/* ▼ header2（新たな体験を築き）は明示的にbrで改行 */
+.header01-vertical-mobile {
+  display: inline-block;
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  white-space: normal;
+}
+
+/* ▼ header3（TSUBASAのみ縦書き） */
+.tsubasa-vertical-mobile {
+  display: inline-block;
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  white-space: normal;
+}
+
+/* header3「成長できる環境」用 表示切替 */
+.growth-normal {
+  display: inline;
+}
+.growth-vertical-mobile {
+  display: none;
+}
+@media screen and (max-width: 768px) {
+  .growth-normal,
+  .tsubasa-normal {
+    display: none !important;
+  }
+
+  .vertical-pair {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+  }
+
+  .growth-vertical-mobile,
+  .tsubasa-vertical-mobile {
+    display: block !important;
+    white-space: normal !important;
+    font-size: inherit;
+    line-height: 1.6;
+    text-align: center;
+    writing-mode: initial !important;
+    text-orientation: initial !important;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  body {
+    font-size: 15px;
+    line-height: 1.7;
+  }
+  h2 {
+    font-size: 1.3em;
+  }
+}
+
+/* --- header01 表示切り替え修正 --- */
+.header01-normal {
+  display: inline;
+}
+.header01-vertical-mobile {
+  display: none;
+}
+@media screen and (max-width: 768px) {
+  .header01-normal {
+    display: none !important;
+  }
+  .header01-vertical-mobile {
+    display: block !important;
+    writing-mode: vertical-rl;
+    text-orientation: upright;
+    font-size: inherit;
+    line-height: 1.5;
+    text-align: center;
+  }
+}
+
+/* --- header02 表示切り替え修正 --- */
+.tsubasa-normal,
+.growth-normal {
+  display: inline;
+}
+.tsubasa-vertical-mobile,
+.growth-vertical-mobile {
+  display: none;
+}
+@media screen and (max-width: 768px) {
+  .tsubasa-normal,
+  .growth-normal {
+    display: none !important;
+  }
+
+  .tsubasa-vertical-mobile {
+    display: inline-block !important;
+    writing-mode: vertical-lr;
+    text-orientation: upright;
+    font-size: inherit;
+    line-height: 1.5;
+    text-align: center;
+  }
+
+  .growth-vertical-mobile {
+    display: inline-block;
+    font-size: inherit;
+    line-height: 1.5;
+  }
+}
+
+/* PC用（初期） */
+.header0-normal,
+.header01-normal,
+.growth-normal,
+.tsubasa-normal {
+  display: inline;
+}
+
+.header0-vertical-mobile,
+.header01-vertical-mobile,
+.growth-vertical-mobile,
+.tsubasa-vertical-mobile {
+  display: none;
+}
+
+/* スマホ用：768px以下で切り替え */
+@media screen and (max-width: 768px) {
+  .header0-normal {
+    display: none !important;
+  }
+  .header0-vertical-mobile {
+    display: inline-block !important;
+    writing-mode: vertical-lr;
+    text-orientation: upright;
+    white-space: normal;
+    font-size: inherit;
+    line-height: 1.6;
+    text-align: center;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .header0-normal,
+  .header01-normal,
+  .growth-normal,
+  .tsubasa-normal {
+    display: none !important;
+  }
+
+  .header0-vertical-mobile,
+  .header01-vertical-mobile,
+  .growth-vertical-mobile,
+  .tsubasa-vertical-mobile {
+    display: block !important;
+    font-size: inherit;
+    line-height: 1.6;
+    text-align: center;
+    white-space: normal !important;
+    writing-mode: initial !important;
+    text-orientation: initial !important;
+  }
 } 
