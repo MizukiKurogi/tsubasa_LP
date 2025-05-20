@@ -126,7 +126,7 @@ nav.scrolled .nav-title {
 }
 
 .nav-links a {
-    color: #fff;
+    color: #222;
     text-decoration: none;
     font-weight: 600;
     font-size: 1.1em;
@@ -774,6 +774,37 @@ nav.scrolled .hamburger span {
     margin-top: 18px;
     letter-spacing: 0.08em;
 }
+
+/* 雇用条件の追加情報 */
+.employment-conditions {
+    margin-top: 32px;
+    text-align: center;
+}
+
+.employment-conditions p {
+    font-size: 1.4em;
+    color: #222;
+    margin-bottom: 16px;
+    line-height: 1.6;
+}
+
+.employment-conditions strong {
+    color: #ffe14d;
+    font-weight: bold;
+    font-size: 1.1em;
+}
+
+@media screen and (max-width: 768px) {
+    .employment-conditions {
+        margin-top: 24px;
+    }
+    
+    .employment-conditions p {
+        font-size: 1.2em;
+        margin-bottom: 12px;
+    }
+}
+
 @media screen and (max-width: 900px) {
     .salary-box, .salary-example {
         min-width: 0;
